@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Text Editor</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include CodeMirror for better text editing -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"></script>
+    <script type="module" src="firebase.js"></script>
+    <script type="module" src="editor.js"></script>
+
+</head>
+<body>
+    <div class="navbar">
+        <h1>CollabPad
+        </h1>
+        <div>
+            <button id="loginBtn">Sign In with Google</button>
+            <button id="logoutBtn" style="display:none;">Logout</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>Real-Time Collaborative Text Editor</h2>
+        <p>Share this link with others to collaborate:</p>
+        <input type="text" id="roomId" readonly>
+        <button onclick="copyRoomId()">Copy</button>
+
+        <textarea id="editor"></textarea>
+    </div>
+    <button id="saveButton">Save</button>
+
+    <script type="module">
+        import { signIn, logout, getUser } from "./firebase.js";
+
+        document.getElementById("loginBtn").addEventListener("click", signIn);
+        document.getElementById("logoutBtn").addEventListener("click", logout);
+
+        const user = getUser();
+        if (user) {
+            document.getElementById("loginBtn").style.display = "none";
+            document.getElementById("logoutBtn").style.display = "block";
+            document.body.insertAdjacentHTML("afterbegin", `<p>Welcome, ${user.displayName}!</p>`);
+        }
+    </script>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
+
